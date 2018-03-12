@@ -30,3 +30,6 @@ utility_servers
 gateway_servers
 master_servers
 worker_servers
+
+[all:vars]
+ansible_user=centos

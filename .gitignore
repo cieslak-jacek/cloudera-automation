@@ -6,8 +6,6 @@
 site.retry
 licence
 files/*license*
-<<<<<<< HEAD
 .*.swp
-=======
->>>>>>> 348722a414f3efb9c0f27ff0971949dc9e0672b1
 cdh**
+action_plugins/*.pyc
