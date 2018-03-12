@@ -6,4 +6,5 @@
 site.retry
 licence
 files/*license*
+.*.swp
 cdh**
