@@ -4,7 +4,7 @@
 export CLUSTER="cdh${RANDOM}"
 export AMI="ami-48f4bb31"		## SE Disabled AMI
 export INSTANCE_TYPE="t2.xlarge"
-export KEY_NAME="jn"
+export KEY_NAME="tsystems"
 mkdir ${CLUSTER}
 
 start_instance() {
