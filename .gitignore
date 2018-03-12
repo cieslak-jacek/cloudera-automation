@@ -5,5 +5,5 @@
 .DS_Store
 site.retry
 licence
-files
+files/*license*
 cdh**
