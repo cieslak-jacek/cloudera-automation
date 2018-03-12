@@ -75,6 +75,9 @@ done
 
 SCM=$(cat ${CLUSTER}/scm-hostnames.txt)
 
-echo "ssh ubuntu@${SCM}"
-echo ssh -CD 8157 centos@${SCM}
-echo "http://${SCM}:7180/"
+echo "ssh ubuntu@${SCM}"	| tee -a ${CLUSTER}/commands.txt
+echo ssh -CD 8157 centos@${SCM}	| tee -a ${CLUSTER}/commands.txt
+echo "http://${SCM}:7180/"      | tee -a ${CLUSTER}/commands.txt
+echo "press any key...."
+read -n 1 -s
+ansible-playbook -i ${CLUSTER}/inventory --user=centos --private-key=~/.ssh/tsystems.pem -e krb5_kdc_type=mit -e default_realm=CDH.AWS -e krb5_kdc_admin_user=centos -e krb5_kdc_admin_passwd=password site.yml
