@@ -16,7 +16,7 @@ start_instance() {
 		--security-group-ids sg-fb79ce80 \
 		--subnet-id subnet-036d515b \
 		--block-device-mapping "DeviceName=/dev/sda1,Ebs={VolumeSize=32}" \
-		--tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=${CLUSTER}-${1}}]" \
+		--tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=${CLUSTER}-${1}},{Key=Cluster,Value=${CLUSTER}}]" \
 		--count 1 | \
 		jq -r ".Instances[].InstanceId" \
 		> ${CLUSTER}/id-${1}.txt
@@ -31,7 +31,7 @@ start_instances() {
 		--security-group-ids sg-fb79ce80 \
 		--subnet-id subnet-036d515b \
 		--block-device-mapping "DeviceName=/dev/sda1,Ebs={VolumeSize=32}" \
-		--tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=${CLUSTER}-${1}}]" \
+		--tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=${CLUSTER}-${1}},{Key=Cluster,Value=${CLUSTER}}]" \
 		--count 3 | \
 		jq -r ".Instances[].InstanceId" \
 		> ${CLUSTER}/id-${1}.txt
