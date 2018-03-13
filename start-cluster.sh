@@ -73,11 +73,25 @@ for IP in $(cat ${CLUSTER}/worker-hostnames.txt); do
 	sed -i "/\[worker_servers\]/a ${IP}"  ${CLUSTER}/inventory
 done
 
-SCM=$(cat ${CLUSTER}/scm-hostnames.txt)
 
-echo "ssh ubuntu@${SCM}"	| tee -a ${CLUSTER}/commands.txt
-echo ssh -CD 8157 centos@${SCM}	| tee -a ${CLUSTER}/commands.txt
-echo "http://${SCM}:7180/"      | tee -a ${CLUSTER}/commands.txt
+aws ec2 describe-instances \
+	--filters "Name=tag:Name,Values=${CLUSTER}-scm" --region eu-west-1 --output json \
+	| jq -r .Reservations[].Instances[].PublicDnsName \
+		> ${CLUSTER}/scm-public.txt
+
+SCM_PUBLIC=$(cat ${CLUSTER}/scm-public.txt)
+SCM_PRIVATE=$(cat ${CLUSTER}/scm-hostnames.txt)
+
+echo "ssh ubuntu@${SCM_PUBLIC}"	| tee -a ${CLUSTER}/commands.txt
+echo "ssh -CD 8157 centos@${SCM_PUBLIC}" | tee -a ${CLUSTER}/commands.txt
 echo "press any key...."
 read -n 1 -s
+
 ansible-playbook -i ${CLUSTER}/inventory --user=centos --private-key=~/.ssh/tsystems.pem -e krb5_kdc_type=mit -e default_realm=CDH.AWS -e krb5_kdc_admin_user=centos -e krb5_kdc_admin_passwd=password site.yml
+
+echo "######################################################################"
+echo "ssh ubuntu@${SCM_PUBLIC}"
+echo "ssh -CD 8157 centos@${SCM_PUBLIC}"
+echo "http://${SCM_PRIVATE}:7180/" | tee -a ${CLUSTER}/commands.txt
+echo "######################################################################"
+
